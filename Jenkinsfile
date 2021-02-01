@@ -3,9 +3,9 @@ pipeline {
     agent any
 
     stages {
-        stage('Hello') {
+        stage('Deploy nginx') {
             steps {
-                echo 'Hello World'
+                 sh("kubectl get ns")
             }
         }
     }
