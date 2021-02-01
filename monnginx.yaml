@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: monnginx
+spec:
+  selector:
+    matchLabels:
+      app: monnginx
+  replicas: 2 # tells deployment to run 2 pods matching the template
+  template:
+    metadata:
+      labels:
+        app: monnginx
+    spec:
+      containers:
+      - name: monnginx
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80
+---
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: monnginx
+  name: monnginx
+  namespace: default
+spec:
+  clusterIP: 10.102.237.202
+  externalTrafficPolicy: Cluster
+  ports:
+  - name: 8081-80
+    nodePort: 31614
+    port: 8081
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: monnginx
+  sessionAffinity: None
+  type: NodePort
+status:
+  loadBalancer: {}
